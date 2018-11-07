@@ -18,6 +18,7 @@ const app = express()
 
 app.use(cors())
 app.use(bodyParser.json())
+
 /////////////// ROUTES ////////////////
 //require("./routes/authRoutes")(app);
 app.listen(PORT, () => {
