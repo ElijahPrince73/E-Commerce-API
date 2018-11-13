@@ -29,4 +29,22 @@ module.exports = (app) =>{
                 res.status(400).send(err);
             });
     })
+
+    app.post('/api/login', (req, res) => {
+        console.log(User);
+        const email = req.body.email
+        const password = req.body.password
+
+        User.findByCredentials(email, password)
+            .then(user => {
+                return user.generateAuthToken()
+                    .then(token => {
+                        res.header('x-auth', token).send(user)
+                    })
+            }).catch(err => {
+                res.status(403).send({
+                    errorMessage: 'Invalid Login'
+                })
+            })
+    })
 };
