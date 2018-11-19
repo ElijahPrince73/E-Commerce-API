@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const CategoriesSchema = require('./Category')
+const ProductSchema = require('./Product')
+const OrdersSchema = require('./Orders')
 
 const UserSchema = new mongoose.Schema({
   email: {
@@ -33,14 +36,22 @@ const UserSchema = new mongoose.Schema({
     },
   ],
   cart: {
-    products: Array,
+    products: [ProductSchema],
   },
-  orders: Array,
+  orders: [OrdersSchema],
+  categories: [CategoriesSchema]
 });
 
-UserSchema.methods.generateAuthToken = function () {
+UserSchema.methods.generateAuthToken = function (type) {
   const user = this;
-  const access = 'user';
+  let access
+
+  if (type === 'admin') {
+    access = 'admin'
+  } else {
+    access = 'user'
+  }
+
   const token = jwt
     .sign(
       {
