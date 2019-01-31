@@ -5,7 +5,7 @@ const authenticate = require("../middleware/auth");
 const bcrypt = require("bcryptjs");
 
 module.exports = (app) =>{
-    // Register Route User
+    // Register User Route
     app.post('/api/register', (req, res) => {
         if (req.body.password !== req.body.passwordConf) {
             res.status(403).send({
@@ -54,6 +54,7 @@ module.exports = (app) =>{
             });
     })
 
+    // Login Route
     app.post('/api/login', (req, res) => {
         const email = req.body.email
         const password = req.body.password
@@ -69,5 +70,9 @@ module.exports = (app) =>{
                     errorMessage: 'Invalid Login'
                 })
             })
+    })
+
+    app.get('/api/test', (req, res) => {
+        res.send('WORKED')
     })
 };

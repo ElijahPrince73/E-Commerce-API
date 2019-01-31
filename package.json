@@ -8,15 +8,15 @@
     "body-parser": "^1.18.3",
     "cookie-session": "^2.0.0-beta.3",
     "cors": "^2.8.5",
-    "eslint": "^5.8.0",
+    "eslint": "^5.12.1",
     "eslint-config-airbnb": "^17.1.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jsx-a11y": "^6.1.2",
-    "eslint-plugin-react": "^7.11.1",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.0",
+    "eslint-plugin-react": "^7.12.4",
     "express": "^4.16.4",
-    "jsonwebtoken": "^8.3.0",
-    "mongoose": "^5.3.9",
-    "nodemon": "^1.18.5",
-    "validator": "^10.9.0"
+    "jsonwebtoken": "^8.4.0",
+    "mongoose": "^5.4.8",
+    "nodemon": "^1.18.9",
+    "validator": "^10.11.0"
   }
 }
