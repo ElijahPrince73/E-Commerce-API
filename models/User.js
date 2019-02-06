@@ -25,10 +25,6 @@ const UserSchema = new mongoose.Schema({
   },
   tokens: [
     {
-      access: {
-        type: String,
-        required: true,
-      },
       token: {
         type: String,
         required: true,
@@ -39,7 +35,10 @@ const UserSchema = new mongoose.Schema({
     products: [ProductSchema],
   },
   orders: [OrdersSchema],
-  categories: [CategoriesSchema]
+  categories: [CategoriesSchema],
+  access: {
+    type: String
+  }
 });
 
 UserSchema.methods.generateAuthToken = function (type) {
@@ -56,16 +55,15 @@ UserSchema.methods.generateAuthToken = function (type) {
     .sign(
       {
         _id: user._id.toHexString(),
-        access,
       },
       'abc123',
     )
     .toString();
 
   user.tokens.push({
-    access,
     token,
   });
+  user.access = access
 
   return user.save().then(() => token);
 };
@@ -75,19 +73,22 @@ UserSchema.statics.findByCredentials = function (email, password) {
 
   return User.findOne({ email })
     .then((user) => {
-      if(!user) {
-        return Promise.reject()
-      }
 
-      return new Promise((resolve, reject) => {
-        bcrypt.compare(password, user.password, (err, res) => {
-          if(res) {
-            resolve(user)
-          } else {
-            reject()
-          }
-        })
-      })
+      // Will only work if we have a user with a certain access level
+      if (user && (user.access === "admin" || user.access === "user")) {
+        console.log('success');
+        return new Promise((resolve, reject) => {
+          bcrypt.compare(password, user.password, (err, res) => {
+            if (res) {
+              resolve(user);
+            } else {
+              reject();
+            }
+          });
+        });
+      } else {
+        return Promise.reject();
+      }
     })
 }
 
