@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const CategoriesSchema = require('./Category')
-const ProductSchema = require('./Product')
-const OrdersSchema = require('./Orders')
+const CategoriesSchema = require('./Category');
+const ProductSchema = require('./Product');
+const OrdersSchema = require('./Orders');
 
 const UserSchema = new mongoose.Schema({
   email: {
@@ -37,18 +37,18 @@ const UserSchema = new mongoose.Schema({
   orders: [OrdersSchema],
   categories: [CategoriesSchema],
   access: {
-    type: String
-  }
+    type: String,
+  },
 });
 
 UserSchema.methods.generateAuthToken = function (type) {
   const user = this;
-  let access
+  let access;
 
   if (type === 'admin') {
-    access = 'admin'
+    access = 'admin';
   } else {
-    access = 'user'
+    access = 'user';
   }
 
   const token = jwt
@@ -63,19 +63,18 @@ UserSchema.methods.generateAuthToken = function (type) {
   user.tokens.push({
     token,
   });
-  user.access = access
+  user.access = access;
 
   return user.save().then(() => token);
 };
 
 UserSchema.statics.findByCredentials = function (email, password) {
-  const User = this
+  const User = this;
 
   return User.findOne({ email })
     .then((user) => {
-
       // Will only work if we have a user with a certain access level
-      if (user && (user.access === "admin" || user.access === "user")) {
+      if (user && (user.access === 'admin' || user.access === 'user')) {
         console.log('success');
         return new Promise((resolve, reject) => {
           bcrypt.compare(password, user.password, (err, res) => {
@@ -86,11 +85,10 @@ UserSchema.statics.findByCredentials = function (email, password) {
             }
           });
         });
-      } else {
-        return Promise.reject();
       }
-    })
-}
+      return Promise.reject();
+    });
+};
 
 UserSchema.pre('save', function (next) {
   const user = this;
