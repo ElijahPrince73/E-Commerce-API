@@ -21,7 +21,12 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // ///////////// ROUTES ////////////////
-require('./routes/auth')(app);
+
+// ///////////// USER ROUTES ////////////////
+require('./routes/user-routes/auth')(app);
+// ///////////// ADMIN ROUTES ////////////////
+require('./routes/admin-routes/auth')(app);
+// ///////////// SHARED ROUTES ////////////////
 require('./routes/category')(app);
 
 app.listen(PORT, () => {

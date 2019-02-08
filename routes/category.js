@@ -15,10 +15,33 @@ module.exports = (app) => {
       .catch(err => res.status(400).send(err));
   });
 
+  app.put('/api/category/:categoryId', (req, res) => {
+    const { id, categoryName, description } = req.body;
+    Category.findByIdAndUpdate({ _id: id }, { $set: { categoryName, description } }, { new: true })
+      .then(category => res.send(category))
+      .catch(err => res.status(400).send(err));
+  });
+
+  app.delete('/api/category/:categoryId', (req, res) => {
+    Category.findByIdAndDelete(req.body.id)
+      .then(() => {
+        res.status(200).send('Category deleted');
+      }).catch((err) => {
+        res.status(500).send(err);
+      });
+  });
+
   // Get all categories
   app.get('/api/category', (req, res) => {
     Category.find({})
       .then(categories => res.send(categories))
+      .catch(err => res.status(400).send(err));
+  });
+
+  // Get one category
+  app.get('/api/category/:categoryId', (req, res) => {
+    Category.findById(req.body.id)
+      .then(category => res.send(category))
       .catch(err => res.status(400).send(err));
   });
 };
