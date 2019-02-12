@@ -14,19 +14,25 @@ module.exports = (app) => {
       .then(categories => res.send(categories))
       .catch(err => res.status(400).send(err));
   });
-
+  // Update category
   app.put('/api/category/:categoryId', (req, res) => {
-    const { id, categoryName, description } = req.body;
-    Category.findByIdAndUpdate({ _id: id }, { $set: { categoryName, description } }, { new: true })
+    const { categoryName, description } = req.body;
+    Category.findByIdAndUpdate(
+      { _id: req.params.categoryId },
+      { $set: { categoryName, description } },
+      { new: true },
+    )
       .then(category => res.send(category))
       .catch(err => res.status(400).send(err));
   });
 
+  // Delete Category
   app.delete('/api/category/:categoryId', (req, res) => {
-    Category.findByIdAndDelete(req.body.id)
+    Category.findByIdAndDelete(req.params.categoryId)
       .then(() => {
         res.status(200).send('Category deleted');
-      }).catch((err) => {
+      })
+      .catch((err) => {
         res.status(500).send(err);
       });
   });
@@ -40,7 +46,7 @@ module.exports = (app) => {
 
   // Get one category
   app.get('/api/category/:categoryId', (req, res) => {
-    Category.findById(req.body.id)
+    Category.findById(req.params.categoryId)
       .then(category => res.send(category))
       .catch(err => res.status(400).send(err));
   });

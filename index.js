@@ -20,14 +20,13 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// ///////////// ROUTES ////////////////
-
 // ///////////// USER ROUTES ////////////////
 require('./routes/user-routes/auth')(app);
 // ///////////// ADMIN ROUTES ////////////////
 require('./routes/admin-routes/auth')(app);
 // ///////////// SHARED ROUTES ////////////////
 require('./routes/category')(app);
+require('./routes/products')(app);
 
 app.listen(PORT, () => {
   console.log(`listening on port: ${PORT}`);
