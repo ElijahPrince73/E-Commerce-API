@@ -7,7 +7,11 @@ const ProductSchema = Schema({
     type: String,
     required: true,
   },
-  description: String,
+  productDescription: String,
+  category: {
+    type: Schema.Types.ObjectId,
+    ref: 'Category',
+  },
 });
 
 mongoose.model('Product', ProductSchema);
