@@ -27,6 +27,7 @@ require('./routes/admin-routes/auth')(app);
 // ///////////// SHARED ROUTES ////////////////
 require('./routes/category')(app);
 require('./routes/products')(app);
+require('./routes/product-category')(app);
 
 app.listen(PORT, () => {
   console.log(`listening on port: ${PORT}`);

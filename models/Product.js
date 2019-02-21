@@ -8,10 +8,7 @@ const ProductSchema = Schema({
     required: true,
   },
   productDescription: String,
-  category: {
-    type: Schema.Types.ObjectId,
-    ref: 'Category',
-  },
+  categories: { type: Schema.Types.ObjectId, ref: 'Category' },
 });
 
 mongoose.model('Product', ProductSchema);

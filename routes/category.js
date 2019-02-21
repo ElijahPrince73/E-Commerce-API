@@ -15,24 +15,6 @@ module.exports = (app) => {
       .catch(err => res.status(400).send(err));
   });
 
-  // app.post('/api/category-with-product', (req, res) => {
-  //   const {
-  //     categoryName, description, productName, productDescription,
-  //   } = req.body;
-  //   const category = new Category({
-  //     categoryName,
-  //     description,
-  //   });
-
-  //   category.save()
-  //     .then((category) => {
-  //       const product = new Product({
-
-  //       });
-  //     })
-  //     .catch(err => res.status(400).send(err));
-  // });
-
   // Update category
   app.put('/api/category/:categoryId', (req, res) => {
     const { categoryName, description } = req.body;
