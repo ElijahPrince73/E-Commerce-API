@@ -22,17 +22,4 @@ module.exports = (app) => {
         return category.save().then(newCategory => res.send(newCategory));
       });
   });
-
-  app.get('/api/category-with-product/:categoryId', (req, res) => {
-    const categoryId = req.params.categoryId;
-    Category
-      .findById(categoryId)
-      .populate({
-        path: 'productList.product',
-        model: 'Product',
-      })
-      .exec((err, category) => {
-        console.log(category);
-      });
-  });
 };
