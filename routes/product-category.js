@@ -22,4 +22,19 @@ module.exports = (app) => {
         return category.save().then(newCategory => res.send(newCategory));
       });
   });
+
+  // Delete product within category
+  app.delete('/api/category-with-product/:categoryId', (req, res) => {
+    const categoryId = req.params.categoryId;
+    const { productId } = req.body;
+
+    Category.findById(categoryId)
+      .then((category) => {
+        category.productList.pull({ _id: productId });
+        return category.save();
+      })
+      .then((newCategory) => {
+        res.send(newCategory);
+      });
+  });
 };
