@@ -9,11 +9,7 @@ const PORT = process.env.PORT || 5000;
 require('./models/User');
 
 mongoose.connect('mongodb://admin:xTf8jfytaUmHuQE@ds151863.mlab.com:51863/e-commerce-api',
-  { useNewUrlParser: true }).then(() => {
-  console.log('connected');
-}).catch((err) => {
-  console.log(err, 'err');
-});
+  { useNewUrlParser: true });
 
 const app = express();
 

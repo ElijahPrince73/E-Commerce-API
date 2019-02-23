@@ -4,7 +4,7 @@ const Category = mongoose.model('Category');
 const Product = mongoose.model('Product');
 
 module.exports = (app) => {
-  // Update category
+  // Add product to category
   app.post('/api/category-with-product/:categoryId', (req, res) => {
     const categoryId = req.params.categoryId;
     const { productName, productDescription } = req.body;
@@ -19,8 +19,8 @@ module.exports = (app) => {
         });
 
         category.productList.push(product);
-        return category.save().then(newCategory => res.send(newCategory));
-      });
+        return category.save();
+      }).then(newCategory => res.send(newCategory));
   });
 
   // Delete product within category
@@ -28,9 +28,19 @@ module.exports = (app) => {
     const categoryId = req.params.categoryId;
     const { productId } = req.body;
 
+    // Finds category with the id
     Category.findById(categoryId)
       .then((category) => {
-        category.productList.pull({ _id: productId });
+        // used to filter for product we want to delete
+        const updatedProductList = category.productList.filter((product) => {
+          const productID = JSON.stringify(product._id);
+          const deletedId = JSON.stringify(productId);
+          return productID !== deletedId;
+        });
+
+        // reassign productList to category
+        category.productList = updatedProductList;
+
         return category.save();
       })
       .then((newCategory) => {
