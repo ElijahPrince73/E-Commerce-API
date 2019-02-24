@@ -1,27 +1,22 @@
 const mongoose = require('mongoose');
 
-// const Category = mongoose.model('Category');
 const Product = mongoose.model('Product');
 
 
 module.exports = (app) => {
   // Create new product
   app.post('/api/product', (req, res) => {
+    const { productName, productDescription, price } = req.body;
     const product = new Product({
-      productName: req.body.productName,
-      description: req.body.description,
+      productName,
+      productDescription,
+      price,
     });
 
     product.save()
       .then(categories => res.send(categories))
       .catch(err => res.status(400).send(err));
   });
-
-  // TODO:
-
-  // Create a route to add products to a already created category
-  // Get products from category
-  // Delete a product from a category
 
   // Update product
   app.put('/api/product/:productId', (req, res) => {

@@ -9,6 +9,8 @@ const ProductSchema = Schema({
     required: true,
   },
   productDescription: String,
+  quantity: Number,
+  price: Number,
   categories: [Category],
 });
 

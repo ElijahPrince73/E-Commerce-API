@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const CategoriesSchema = require('./Category');
 const ProductSchema = require('./Product');
+const CartSchema = require('./Cart');
 const OrdersSchema = require('./Orders');
 
 const UserSchema = new mongoose.Schema({
@@ -31,11 +32,10 @@ const UserSchema = new mongoose.Schema({
       },
     },
   ],
-  cart: {
-    products: [ProductSchema],
-  },
+  cart: [CartSchema],
   orders: [OrdersSchema],
   categories: [CategoriesSchema],
+  products: [ProductSchema],
   access: {
     type: String,
   },

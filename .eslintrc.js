@@ -17,6 +17,7 @@ module.exports = {
     "jsx-a11y/anchor-is-valid": "off",
     "import/prefer-default-export": "off",
     "func-names": "off",
-    "no-param-reassign": "off"
+    "no-param-reassign": "off",
+    "no-return-assign": "off"
   }
 };
