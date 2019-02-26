@@ -1,3 +1,4 @@
+/* eslint eqeqeq: 0 */ // --> OFF
 const mongoose = require('mongoose');
 
 const Product = mongoose.model('Product');
@@ -59,7 +60,71 @@ module.exports = (app) => {
       });
   });
   // Remove from cart
+  app.delete('/api/delete-product-from-cart', (req, res) => {
+    const {
+      productId, userId,
+    } = req.body;
+
+    User.findById(userId)
+      .then((user) => {
+        const cart = user.cart[0].cartProducts;
+
+        // Loose way of finding the product in the cart based 0f ID
+        const removedProductArtr = cart.filter(product => product._id != productId);
+
+        // Add back the array
+        user.cart[0].cartProducts = removedProductArtr;
+
+        return user.save();
+      })
+      .then(() => res.send('Deleted from cart'))
+      .catch((err) => {
+        res.send(err);
+      });
+  });
+
   // Change quantity of product
+  app.put('/api/change-product-quanity', (req, res) => {
+    const {
+      productId, userId, quantity,
+    } = req.body;
+
+    User.findById(userId)
+      .then((user) => {
+        const cart = user.cart[0].cartProducts;
+        // Find index of the product in the array
+        const indexToUpdate = cart.findIndex(product => product._id == productId);
+
+        // Grab the product
+        const productToUpdate = cart.find(product => product._id == productId);
+
+        // Update quanity
+        productToUpdate.quantity = quantity;
+
+        // Remove and update with updated quanity
+        cart.splice(indexToUpdate, 1, productToUpdate);
+
+        return user.save();
+      })
+      .then(() => res.send('Success'))
+      .catch((err) => {
+        res.send(err);
+      });
+  });
+
   // Get products in cart
-  // Delete entire cart after purchase
+  app.get('/api/cart', (req, res) => {
+    const {
+      userId,
+    } = req.body;
+
+    User.findById(userId)
+      .then((user) => {
+        const cart = user.cart[0].cartProducts;
+        res.send(cart);
+      })
+      .catch((err) => {
+        res.send(err);
+      });
+  });
 };
