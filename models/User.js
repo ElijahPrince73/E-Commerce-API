@@ -90,6 +90,25 @@ UserSchema.statics.findByCredentials = function (email, password) {
     });
 };
 
+// Model Method to findByToken
+UserSchema.statics.findByToken = function (token) {
+  const User = this;
+  let decoded;
+
+  try {
+    // Verify that the token is something we created
+    decoded = jwt.verify(token, 'abc123');
+  } catch (e) {
+    return new Promise((resolve, reject) => {
+      reject();
+    });
+  }
+  return User.findOne({
+    _id: decoded._id,
+    'tokens.token': token,
+  });
+};
+
 UserSchema.pre('save', function (next) {
   const user = this;
   if (user.isModified('password')) {

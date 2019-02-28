@@ -22,17 +22,20 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// ///////////// USER ROUTES ////////////////
+// ///////////// USER ROUTES //////////////////
 require('./routes/user-routes/auth')(app);
 require('./routes/user-routes/cart')(app);
 
-// ///////////// ADMIN ROUTES ////////////////
+// ///////////// ADMIN ROUTES /////////////////
 require('./routes/admin-routes/auth')(app);
 
 // ///////////// SHARED ROUTES ////////////////
 require('./routes/category')(app);
 require('./routes/products')(app);
 require('./routes/product-category')(app);
+
+// ///////////// BILLING ROUTES ////////////////
+require('./routes/billing')(app);
 
 app.listen(PORT, () => {
   console.log(`listening on port: ${PORT}`);

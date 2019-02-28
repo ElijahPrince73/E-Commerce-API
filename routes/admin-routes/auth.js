@@ -4,7 +4,7 @@ const User = mongoose.model('User');
 
 module.exports = (app) => {
   // ADMIN Auth Routes
-  app.post('/api/adminregister', (req, res) => {
+  app.post('/api/admin-register', (req, res) => {
     if (req.body.password !== req.body.passwordConf) {
       res.status(403).send({
         errorMessage: 'Password and Password Confirmation Do Not Match',
@@ -26,7 +26,7 @@ module.exports = (app) => {
       });
   });
 
-  app.post('/api/adminlogin', (req, res) => {
+  app.post('/api/admin-login', (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
 

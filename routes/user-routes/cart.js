@@ -15,6 +15,7 @@ module.exports = (app) => {
     // Find product
     Product.findById(productId)
       .then(product => productItem = product);
+
     // Find user
     User.findById(userId)
       .then((user) => {
@@ -30,14 +31,7 @@ module.exports = (app) => {
         // adds the product found to the cartProducts array
         cart[0].cartProducts.push(productItem);
 
-        // Calcs total
-        const total = cart[0].cartProducts.map((product) => {
-          let totalAmount = 0;
-
-          totalAmount += product.price;
-
-          return totalAmount;
-        });
+        const total = cart[0].cartProducts.reduce((a, b) => a + b.price, 0);
 
         // Still hacky
         // assigns the cartProducts array to the cart
@@ -45,7 +39,7 @@ module.exports = (app) => {
 
         const updatedCart = {
           cartProducts,
-          total: total[0],
+          total,
           items: cartProducts.length,
         };
 
