@@ -2,17 +2,19 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+require('dotenv').config();
 
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
+
 const PORT = process.env.PORT || 5000;
 
 // Models
 require('./models/User');
 
-mongoose.connect('mongodb://admin:xTf8jfytaUmHuQE@ds151863.mlab.com:51863/e-commerce-api',
-  { useNewUrlParser: true });
+const DB_URL = process.env.DB_URL;
+mongoose.connect(DB_URL, { useNewUrlParser: true });
 
 const app = express();
 
