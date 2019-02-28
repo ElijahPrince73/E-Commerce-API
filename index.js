@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-require('dotenv').config();
+require('dotenv').config({ path: './.env.default' });
 
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
@@ -14,6 +14,7 @@ const PORT = process.env.PORT || 5000;
 require('./models/User');
 
 const DB_URL = process.env.DB_URL;
+
 mongoose.connect(DB_URL, { useNewUrlParser: true });
 
 const app = express();
