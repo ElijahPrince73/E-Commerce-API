@@ -3,10 +3,11 @@ const mongoose = require('mongoose');
 
 const Product = mongoose.model('Product');
 const User = mongoose.model('User');
+const authenticate = require('../../middleware/auth');
 
 module.exports = (app) => {
   // Add product to cart
-  app.post('/api/add-to-cart', (req, res) => {
+  app.post('/api/add-to-cart', authenticate, (req, res) => {
     const {
       productId, quantity, userId,
     } = req.body;
@@ -54,7 +55,7 @@ module.exports = (app) => {
       });
   });
   // Remove from cart
-  app.delete('/api/delete-product-from-cart', (req, res) => {
+  app.delete('/api/delete-product-from-cart', authenticate, (req, res) => {
     const {
       productId, userId,
     } = req.body;
@@ -78,7 +79,7 @@ module.exports = (app) => {
   });
 
   // Change quantity of product
-  app.put('/api/change-product-quanity', (req, res) => {
+  app.put('/api/change-product-quanity', authenticate, (req, res) => {
     const {
       productId, userId, quantity,
     } = req.body;
@@ -107,7 +108,7 @@ module.exports = (app) => {
   });
 
   // Get products in cart
-  app.get('/api/cart', (req, res) => {
+  app.get('/api/cart', authenticate, (req, res) => {
     const {
       userId,
     } = req.body;

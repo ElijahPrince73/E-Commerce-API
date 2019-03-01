@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
+const authenticate = require('../middleware/auth');
 
 const Category = mongoose.model('Category');
 const Product = mongoose.model('Product');
 
 module.exports = (app) => {
   // Add product to category
-  app.post('/api/category-with-product/:categoryId', (req, res) => {
+  app.post('/api/category-with-product/:categoryId', authenticate, (req, res) => {
     const categoryId = req.params.categoryId;
     const { productName, productDescription } = req.body;
 
@@ -24,7 +25,7 @@ module.exports = (app) => {
   });
 
   // Delete product within category
-  app.delete('/api/category-with-product/:categoryId', (req, res) => {
+  app.delete('/api/category-with-product/:categoryId', authenticate, (req, res) => {
     const categoryId = req.params.categoryId;
     const { productId } = req.body;
 

@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
+const authenticate = require('../middleware/auth');
 
 const Category = mongoose.model('Category');
 
 module.exports = (app) => {
   // Create new Category
-  app.post('/api/category', (req, res) => {
+  app.post('/api/category', authenticate, (req, res) => {
     const category = new Category({
       categoryName: req.body.categoryName,
       description: req.body.description,
@@ -16,7 +17,7 @@ module.exports = (app) => {
   });
 
   // Update category
-  app.put('/api/category/:categoryId', (req, res) => {
+  app.put('/api/category/:categoryId', authenticate, (req, res) => {
     const { categoryName, description } = req.body;
     Category.findByIdAndUpdate(
       { _id: req.params.categoryId },
@@ -28,7 +29,7 @@ module.exports = (app) => {
   });
 
   // Delete Category
-  app.delete('/api/category/:categoryId', (req, res) => {
+  app.delete('/api/category/:categoryId', authenticate, (req, res) => {
     Category.findByIdAndDelete(req.params.categoryId)
       .then(() => {
         res.status(200).send('Category deleted');
@@ -39,14 +40,14 @@ module.exports = (app) => {
   });
 
   // Get all categories
-  app.get('/api/category', (req, res) => {
+  app.get('/api/category', authenticate, (req, res) => {
     Category.find({})
       .then(categories => res.send(categories))
       .catch(err => res.status(400).send(err));
   });
 
   // Get one category
-  app.get('/api/category/:categoryId', (req, res) => {
+  app.get('/api/category/:categoryId', authenticate, (req, res) => {
     Category.findById(req.params.categoryId)
       .then(category => res.send(category))
       .catch(err => res.status(400).send(err));
