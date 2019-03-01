@@ -28,6 +28,7 @@ require('./routes/user-routes/cart')(app);
 
 // ///////////// ADMIN ROUTES /////////////////
 require('./routes/admin-routes/auth')(app);
+require('./routes/admin-routes/images')(app);
 
 // ///////////// SHARED ROUTES ////////////////
 require('./routes/category')(app);
