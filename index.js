@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const formidableMiddleware = require('express-formidable');
 require('dotenv').config({ path: './.env.default' });
 
 mongoose.set('useNewUrlParser', true);
@@ -21,6 +22,7 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(formidableMiddleware());
 
 // ///////////// USER ROUTES //////////////////
 require('./routes/user-routes/auth')(app);

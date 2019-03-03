@@ -18,6 +18,7 @@ module.exports = {
     "import/prefer-default-export": "off",
     "func-names": "off",
     "no-param-reassign": "off",
-    "no-return-assign": "off"
+    "no-return-assign": "off",
+    "prefer-const": "off"
   }
 };

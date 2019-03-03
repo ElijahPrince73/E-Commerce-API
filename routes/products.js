@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
-const AWS = require('aws-sdk');
-const multer = require('multer');
-const multerS3 = require('multer-s3');
 const authenticate = require('../middleware/auth');
 require('dotenv').config({ path: './.env.default' });
+const postImageToBucket = require('../utils/postImageToBucket');
 
 const Product = mongoose.model('Product');
 const Image = mongoose.model('Image');
@@ -11,53 +9,49 @@ const Image = mongoose.model('Image');
 module.exports = (app) => {
   // Create new product
   app.post('/api/product', authenticate, (req, res) => {
-    console.log(req);
-    const {
-      productName, productDescription, price, alt,
+    let {
+      productName, productDescription, price, alt, _id,
     } = req.body;
-    // Configure client for use with Spaces
-    const spacesEndpoint = new AWS.Endpoint(process.env.SPACES_NAME);
-    const s3 = new AWS.S3({
-      endpoint: spacesEndpoint,
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_key,
-    });
 
-    let emptyImage = {};
+    const productValues = JSON.parse(req.fields.text);
 
-    const upload = multer({
-      storage: multerS3({
-        s3,
-        bucket: process.env.BUCKET_NAME,
-        acl: 'public-read',
-        key(req, file, cb) {
-          emptyImage = file;
-          cb(null, file.originalname);
-        },
-      }),
-    }).array('file', 10);
+    productName = productValues.productName;
+    productDescription = productValues.productDescription;
+    price = productValues.price;
 
-    upload(req, res, (error) => {
-      if (error) {
-        res.status(400).send('Error uploading image');
-      }
-    });
+    if (req.files === ' ') {
+      postImageToBucket(req, res)
+        .then((imageName) => {
+          const image = new Image({
+            url: `${process.env.SPACES_URL}/${imageName}`,
+            alt,
+            userId: _id,
+          });
+          return image.save();
+        })
+        .then((image) => {
+          const product = new Product({
+            productName,
+            productDescription,
+            price,
+            images: [image.url],
+          });
 
-    const image = new Image({
-      url: `${process.env.SPACES_URL}/${emptyImage.originalname}`,
-      alt,
-    });
+          return product.save();
+        })
+        .then(categories => res.send(categories))
+        .catch(err => res.status(400).send(err));
+    } else {
+      const product = new Product({
+        productName,
+        productDescription,
+        price,
+      });
 
-    const product = new Product({
-      productName,
-      productDescription,
-      price,
-      image: [image],
-    });
-
-    product.save()
-      .then(categories => res.send(categories))
-      .catch(err => res.status(400).send(err));
+      product.save()
+        .then(categories => res.send(categories))
+        .catch(err => res.status(400).send(err));
+    }
   });
 
   // Update product
