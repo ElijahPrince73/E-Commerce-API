@@ -1,7 +1,7 @@
 const DB_STRIPE_KEY = process.env.DB_STRIPE_KEY;
 const stripe = require('stripe')(DB_STRIPE_KEY);
 const mongoose = require('mongoose');
-const authenticate = require('../middleware/auth');
+const authenticate = require('../../middleware/auth');
 
 const User = mongoose.model('User');
 

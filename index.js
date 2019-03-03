@@ -31,14 +31,16 @@ require('./routes/user-routes/cart')(app);
 // ///////////// ADMIN ROUTES /////////////////
 require('./routes/admin-routes/auth')(app);
 require('./routes/admin-routes/images')(app);
+require('./routes/admin-routes/products')(app);
+require('./routes/admin-routes/category')(app);
+require('./routes/admin-routes/product-category')(app);
 
 // ///////////// SHARED ROUTES ////////////////
-require('./routes/category')(app);
-require('./routes/products')(app);
-require('./routes/product-category')(app);
+require('./routes/shared-routes/category')(app);
+require('./routes/shared-routes/products')(app);
 
 // ///////////// BILLING ROUTES ////////////////
-require('./routes/billing')(app);
+require('./routes/shared-routes/billing')(app);
 
 app.listen(PORT, () => {
   console.log(`listening on port: ${PORT}`);
