@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const postImageToBucket = require('../../utils/postImageToBucket');
+const postImageToBucket = require('../../utils/post-image-to-bucket');
 const authenticate = require('../../middleware/auth');
 
 const Image = mongoose.model('Image');

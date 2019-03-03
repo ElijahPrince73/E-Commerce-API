@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
 const authenticate = require('../../middleware/auth');
 require('dotenv').config({ path: './.env.default' });
-const postImageToBucket = require('../../utils/postImageToBucket');
+const createItem = require('../../utils/create-item');
 
 const Product = mongoose.model('Product');
-const Image = mongoose.model('Image');
 
 module.exports = (app) => {
   // Create new product
@@ -19,39 +18,9 @@ module.exports = (app) => {
     productDescription = productValues.productDescription;
     price = productValues.price;
 
-    if (req.files === ' ') {
-      postImageToBucket(req, res)
-        .then((imageName) => {
-          const image = new Image({
-            url: `${process.env.SPACES_URL}/${imageName}`,
-            alt,
-            userId: _id,
-          });
-          return image.save();
-        })
-        .then((image) => {
-          const product = new Product({
-            productName,
-            productDescription,
-            price,
-            images: [image.url],
-          });
-
-          return product.save();
-        })
-        .then(categories => res.send(categories))
-        .catch(err => res.status(400).send(err));
-    } else {
-      const product = new Product({
-        productName,
-        productDescription,
-        price,
-      });
-
-      product.save()
-        .then(categories => res.send(categories))
-        .catch(err => res.status(400).send(err));
-    }
+    createItem(req, res, productName, productDescription, price, alt, _id, 'product')
+      .then(product => res.send(product))
+      .catch(err => res.status(400).send(err));
   });
 
   // Update product

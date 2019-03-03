@@ -1,0 +1,82 @@
+
+const mongoose = require('mongoose');
+require('dotenv').config({ path: './.env.default' });
+const postImageToBucket = require('./post-image-to-bucket');
+
+const Product = mongoose.model('Product');
+const Category = mongoose.model('Category');
+const Image = mongoose.model('Image');
+
+module.exports = (req, res, name, description, price, alt, _id, item) => {
+  // Find out if we adding a image to a product or category
+  if (item === 'product') {
+    // If our object has files to it
+    if (Object.keys(req.files).length !== 0) {
+      // send image to digital ocean bucket
+      return postImageToBucket(req, res)
+        .then((imageName) => {
+          // Save image info to DB
+          const image = new Image({
+            url: `${process.env.SPACES_URL}/${imageName}`,
+            alt,
+            userId: _id,
+          });
+          return image.save();
+        })
+        .then((image) => {
+          // Create product
+          const product = new Product({
+            productName: name,
+            productDescription: description,
+            price,
+            images: [image.url],
+          });
+
+          return product.save();
+        });
+    }
+    //  Only used if out req does't have files
+    const product = new Product({
+      productName: name,
+      productDescription: description,
+      price,
+    });
+
+    return product.save();
+  }
+
+  // else catgory
+  if (req.files === ' ') {
+    postImageToBucket(req, res)
+      .then((imageName) => {
+        const image = new Image({
+          url: `${process.env.SPACES_URL}/${imageName}`,
+          alt,
+          userId: _id,
+        });
+        return image.save();
+      })
+      .then((image) => {
+        const category = new Category({
+          categoryName: name,
+          categoryDescription: description,
+          price,
+          images: [image.url],
+        });
+
+        return product.save();
+      })
+      .then(categories => res.send(categories))
+      .catch(err => res.status(400).send(err));
+  } else {
+    const product = new Product({
+      productName: name,
+      productDescription: description,
+      price,
+    });
+
+    product.save()
+      .then(categories => res.send(categories))
+      .catch(err => res.status(400).send(err));
+  }
+};
