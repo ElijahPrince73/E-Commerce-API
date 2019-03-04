@@ -1,37 +1,37 @@
 /* eslint-disable */
 const AWS = require('aws-sdk');
-const multer = require('multer');
-const multerS3 = require('multer-s3');
 require('dotenv').config({ path: './.env.default' });
 
 module.exports = (req, res) => {
   // Configure client for use with Spaces
   const spacesEndpoint = new AWS.Endpoint(process.env.SPACES_NAME);
-  const s3 = new AWS.S3({
+  AWS.config.update({
     endpoint: spacesEndpoint,
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_key,
   });
 
   const uploader = () => new Promise((resolve, reject) => {
-    let fileName = '';
-    const upload = multer({
-      storage: multerS3({
-        s3,
-        bucket: process.env.BUCKET_NAME,
-        acl: 'public-read',
-        key(req, file, cb) {
-          fileName = file.originalname;
-          cb(null, file.originalname);
-        },
-      }),
-    }).array('file', 10);
+    var s3 = new AWS.S3();
 
-    upload(req, res, (error) => {
-      if (error) {
-        reject();
+    var fileName = req.files[0].originalname
+
+    var params = {
+      Bucket: process.env.BUCKET_NAME,
+      Body: fileName,
+      Key: fileName
+    };
+
+    s3.upload(params, function (err, data) {
+      //handle error
+      if (err) {
+        reject(err)
       }
-      resolve(fileName);
+
+      //success
+      if (data) {
+        resolve(data.key)
+      }
     });
   });
   return uploader();

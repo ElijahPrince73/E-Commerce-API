@@ -1,22 +1,23 @@
 const mongoose = require('mongoose');
+const multer = require('multer');
 const authenticate = require('../../middleware/auth');
 require('dotenv').config({ path: './.env.default' });
 const createItem = require('../../utils/create-item');
 
+// Used to read form-data sent from the client
+const upload = multer();
 const Product = mongoose.model('Product');
 
 module.exports = (app) => {
   // Create new product
-  app.post('/api/product', authenticate, (req, res) => {
+  app.post('/api/product', upload.any(), authenticate, (req, res) => {
+    const productValues = JSON.parse(req.body.text);
+
     let {
-      productName, productDescription, price, alt, _id,
-    } = req.body;
+      productName, productDescription, price, alt,
+    } = productValues;
 
-    const productValues = JSON.parse(req.fields.text);
-
-    productName = productValues.productName;
-    productDescription = productValues.productDescription;
-    price = productValues.price;
+    const _id = req.user._id;
 
     createItem(req, res, productName, productDescription, price, alt, _id, 'product')
       .then(product => res.send(product))

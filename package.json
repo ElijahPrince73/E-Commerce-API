@@ -4,7 +4,7 @@
     "dev": "nodemon index.js"
   },
   "dependencies": {
-    "aws-sdk": "^2.412.0",
+    "aws-sdk": "^2.413.0",
     "babel-eslint": "^10.0.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",

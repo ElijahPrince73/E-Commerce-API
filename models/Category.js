@@ -4,13 +4,13 @@ const Schema = mongoose.Schema;
 const Product = require('./Product');
 
 const CategorySchema = Schema({
-  _id: Schema.Types.ObjectId,
   categoryName: {
     type: String,
     required: true,
   },
   categoryDescription: String,
   productList: [Product],
+  image: String,
 });
 
 mongoose.model('Category', CategorySchema);

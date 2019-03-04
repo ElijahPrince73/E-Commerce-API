@@ -46,37 +46,31 @@ module.exports = (req, res, name, description, price, alt, _id, item) => {
   }
 
   // else catgory
-  if (req.files === ' ') {
-    postImageToBucket(req, res)
+  if (Object.keys(req.files).length !== 0) {
+    return postImageToBucket(req, res)
       .then((imageName) => {
         const image = new Image({
           url: `${process.env.SPACES_URL}/${imageName}`,
           alt,
           userId: _id,
         });
+
         return image.save();
       })
       .then((image) => {
         const category = new Category({
           categoryName: name,
           categoryDescription: description,
-          price,
-          images: [image.url],
+          image: image.url,
         });
 
-        return product.save();
-      })
-      .then(categories => res.send(categories))
-      .catch(err => res.status(400).send(err));
-  } else {
-    const product = new Product({
-      productName: name,
-      productDescription: description,
-      price,
-    });
-
-    product.save()
-      .then(categories => res.send(categories))
-      .catch(err => res.status(400).send(err));
+        return category.save();
+      });
   }
+  const category = new Category({
+    categoryName: name,
+    categoryDescription: description,
+  });
+
+  return category.save();
 };
