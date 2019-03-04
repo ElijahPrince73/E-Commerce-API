@@ -45,4 +45,26 @@ module.exports = (app) => {
         res.status(500).send(err);
       });
   });
+
+  // Delete image from product
+  app.delete('/api/product-image/:productId', authenticate, (req, res) => {
+    const imageId = req.body.imageId;
+    Product.findById(req.params.productId)
+      .then((product) => {
+        // used to filter for product images we want to delete
+        const updatedImageList = product.images.filter((image) => {
+          const imageID = JSON.stringify(image._id);
+          const deletedId = JSON.stringify(imageId);
+          return imageID !== deletedId;
+        });
+
+        // reassign productList to product
+        product.images = updatedImageList;
+
+        return product.save();
+      })
+      .then((newProduct) => {
+        res.send(newProduct);
+      });
+  });
 };

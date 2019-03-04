@@ -29,7 +29,7 @@ module.exports = (req, res, name, description, price, alt, _id, item) => {
             productName: name,
             productDescription: description,
             price,
-            images: [image.url],
+            images: [image],
           });
 
           return product.save();

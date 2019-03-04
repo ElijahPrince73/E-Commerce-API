@@ -46,4 +46,26 @@ module.exports = (app) => {
         res.status(500).send(err);
       });
   });
+
+  // Delete image from category
+  app.delete('/api/category-image/:categoryId', authenticate, (req, res) => {
+    const imageId = req.body.imageId;
+    Category.findById(req.params.categoryId)
+      .then((category) => {
+        // used to filter for product images we want to delete
+        const updatedImageList = category.images.filter((image) => {
+          const imageID = JSON.stringify(image._id);
+          const deletedId = JSON.stringify(imageId);
+          return imageID !== deletedId;
+        });
+
+        // reassign productList to product
+        category.images = updatedImageList;
+
+        return category.save();
+      })
+      .then((newCategory) => {
+        res.send(newCategory);
+      });
+  });
 };
