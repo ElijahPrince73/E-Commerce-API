@@ -20,6 +20,7 @@ module.exports = (req, res, name, description, price, alt, _id, item) => {
             url: `${process.env.SPACES_URL}/${imageName}`,
             alt,
             userId: _id,
+            fileName: imageName,
           });
           return image.save();
         })
@@ -53,6 +54,7 @@ module.exports = (req, res, name, description, price, alt, _id, item) => {
           url: `${process.env.SPACES_URL}/${imageName}`,
           alt,
           userId: _id,
+          fileName: imageName,
         });
 
         return image.save();

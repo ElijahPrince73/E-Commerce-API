@@ -8,6 +8,7 @@ const ImageSchema = new Schema({
   },
   alt: String,
   userId: String,
+  fileName: String,
 });
 
 mongoose.model('Image', ImageSchema);

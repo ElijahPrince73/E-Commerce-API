@@ -12,11 +12,11 @@ module.exports = (req, res) => {
   });
 
   const uploader = () => new Promise((resolve, reject) => {
-    var s3 = new AWS.S3();
+    const s3 = new AWS.S3();
 
-    var fileName = req.files[0].originalname
+    const fileName = req.files[0].originalname
 
-    var params = {
+    const params = {
       Bucket: process.env.BUCKET_NAME,
       Body: fileName,
       Key: fileName

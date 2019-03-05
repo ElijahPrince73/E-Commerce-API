@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const postImageToBucket = require('../../utils/post-image-to-bucket');
+const deleteImageFromBucket = require('../../utils/delete-image-from-bucket');
 const authenticate = require('../../middleware/auth');
 
 const Image = mongoose.model('Image');
@@ -23,6 +24,16 @@ module.exports = (app) => {
       })
       .catch(() => {
         res.status(400).send('Error saving image to DB');
+      });
+  });
+
+  app.delete('/api/delete-image', authenticate, (req, res) => {
+    const imageId = req.body.imageId;
+    deleteImageFromBucket(imageId)
+      .then(() => {
+        res.send('Image deleted from bucket');
+      }).catch((err) => {
+        res.status(400).send(err);
       });
   });
 };
