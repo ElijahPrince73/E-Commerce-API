@@ -36,9 +36,8 @@ require('./routes/admin-routes/product-category')(app);
 // ///////////// SHARED ROUTES ////////////////
 require('./routes/shared-routes/category')(app);
 require('./routes/shared-routes/products')(app);
-
-// ///////////// BILLING ROUTES ////////////////
 require('./routes/shared-routes/billing')(app);
+require('./routes/shared-routes/forgot-password')(app);
 
 app.listen(PORT, () => {
   console.log(`listening on port: ${PORT}`);

@@ -109,6 +109,7 @@ UserSchema.statics.findByToken = function (token) {
   });
 };
 
+// Creates hashed password
 UserSchema.pre('save', function (next) {
   const user = this;
   if (user.isModified('password')) {
