@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
 
       req.user = user;
       req.token = token;
-      next();
+      return next();
     }).catch(() => {
       res.status(401).send('Invalid Request');
     });

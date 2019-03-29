@@ -20,12 +20,13 @@ module.exports = (app) => {
     user.save()
       .then(() => user.generateAuthToken('admin'))
       .then((token) => {
-        res.header('x-auth', token).send(user);
+        res.header('x-auth', token).send(token);
       })
       .catch((err) => {
         res.status(400).send(err);
       });
   });
+
   // Admin login
   app.post('/api/admin-login', (req, res) => {
     const email = req.body.email;
@@ -34,8 +35,9 @@ module.exports = (app) => {
     User.findByCredentials(email, password)
       .then(user => user.generateAuthToken('admin')
         .then((token) => {
-          res.header('x-auth', token).send(user);
-        })).catch(() => {
+          res.header('x-auth', token).send(token);
+        }))
+      .catch(() => {
         res.status(403).send({
           errorMessage: 'Invalid Login',
         });
@@ -44,5 +46,16 @@ module.exports = (app) => {
 
   app.get('/api/me', authenticate, (req, res) => {
     res.send(req.user);
+  });
+
+  app.delete('/api/me/token', authenticate, (req, res) => {
+    req.user.removeToken(req.token).then(
+      () => {
+        res.status(200).send();
+      },
+      () => {
+        res.status(400).send();
+      },
+    );
   });
 };
