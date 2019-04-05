@@ -7,7 +7,7 @@ const Product = mongoose.model('Product');
 const Category = mongoose.model('Category');
 const Image = mongoose.model('Image');
 
-module.exports = (req, res, name, description, price, alt, _id, item) => {
+module.exports = (req, res, name, description, price, alt, userId, item) => {
   // Find out if we adding a image to a product or category
   if (item === 'product') {
     // If our object has files to it
@@ -19,7 +19,7 @@ module.exports = (req, res, name, description, price, alt, _id, item) => {
           const image = new Image({
             url: `${process.env.SPACES_URL}/${imageName}`,
             alt,
-            userId: _id,
+            userId,
             fileName: imageName,
           });
           return image.save();
@@ -30,6 +30,7 @@ module.exports = (req, res, name, description, price, alt, _id, item) => {
             productName: name,
             productDescription: description,
             price,
+            userId,
             images: [image],
           });
 
@@ -41,6 +42,7 @@ module.exports = (req, res, name, description, price, alt, _id, item) => {
       productName: name,
       productDescription: description,
       price,
+      userId,
     });
 
     return product.save();
@@ -53,7 +55,7 @@ module.exports = (req, res, name, description, price, alt, _id, item) => {
         const image = new Image({
           url: `${process.env.SPACES_URL}/${imageName}`,
           alt,
-          userId: _id,
+          userId,
           fileName: imageName,
         });
 

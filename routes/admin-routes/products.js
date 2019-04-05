@@ -17,9 +17,18 @@ module.exports = (app) => {
       productName, productDescription, price, alt,
     } = productValues;
 
-    const _id = req.user._id;
+    const userId = req.user._id;
 
-    createItem(req, res, productName, productDescription, price, alt, _id, 'product')
+    createItem(
+      req,
+      res,
+      productName,
+      productDescription,
+      price,
+      alt,
+      userId,
+      'product',
+    )
       .then(product => res.send(product))
       .catch(err => res.status(400).send(err));
   });

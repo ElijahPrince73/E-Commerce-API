@@ -15,6 +15,7 @@ const ProductSchema = Schema({
   price: Number,
   categories: [Category],
   images: [Image],
+  userId: String,
 });
 
 mongoose.model('Product', ProductSchema);

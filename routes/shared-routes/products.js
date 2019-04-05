@@ -5,8 +5,8 @@ const Product = mongoose.model('Product');
 
 module.exports = (app) => {
   // Get all products
-  app.get('/api/product', authenticate, (req, res) => {
-    Product.find({})
+  app.get('/api/products', authenticate, (req, res) => {
+    Product.find({ userId: req.user._id })
       .then(categories => res.send(categories))
       .catch(err => res.status(400).send(err));
   });
