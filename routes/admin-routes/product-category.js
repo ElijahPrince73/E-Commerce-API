@@ -16,7 +16,7 @@ module.exports = (app) => {
         const product = new Product({
           productName,
           productDescription,
-          category: category._id,
+          category: category.categoryName,
         });
 
         category.productList.push(product);

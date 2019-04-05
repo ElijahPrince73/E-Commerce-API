@@ -7,7 +7,7 @@ const Product = mongoose.model('Product');
 const Category = mongoose.model('Category');
 const Image = mongoose.model('Image');
 
-module.exports = (req, res, name, description, price, alt, userId, item) => {
+module.exports = (req, res, name, description, price, alt, userId, categories, sku, item) => {
   // Find out if we adding a image to a product or category
   if (item === 'product') {
     // If our object has files to it
@@ -31,6 +31,8 @@ module.exports = (req, res, name, description, price, alt, userId, item) => {
             productDescription: description,
             price,
             userId,
+            categories,
+            sku,
             images: [image],
           });
 
@@ -43,6 +45,8 @@ module.exports = (req, res, name, description, price, alt, userId, item) => {
       productDescription: description,
       price,
       userId,
+      categories,
+      sku,
     });
 
     return product.save();

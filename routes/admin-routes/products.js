@@ -14,7 +14,7 @@ module.exports = (app) => {
     const productValues = JSON.parse(req.body.text);
 
     let {
-      productName, productDescription, price, alt,
+      productName, productDescription, price, alt, categories, sku,
     } = productValues;
 
     const userId = req.user._id;
@@ -27,6 +27,8 @@ module.exports = (app) => {
       price,
       alt,
       userId,
+      categories,
+      sku,
       'product',
     )
       .then(product => res.send(product))
@@ -35,10 +37,10 @@ module.exports = (app) => {
 
   // Update product
   app.put('/api/product/:productId', authenticate, (req, res) => {
-    const { productName, description } = req.body;
+    const { productName, description, categories } = req.body;
     Product.findByIdAndUpdate(
       { _id: req.params.productId },
-      { $set: { productName, description } },
+      { $set: { productName, description, categories } },
       { new: true },
     )
       .then(product => res.send(product))

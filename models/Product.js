@@ -16,6 +16,7 @@ const ProductSchema = Schema({
   categories: [Category],
   images: [Image],
   userId: String,
+  sku: String,
 });
 
 mongoose.model('Product', ProductSchema);

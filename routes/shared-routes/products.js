@@ -7,7 +7,9 @@ module.exports = (app) => {
   // Get all products
   app.get('/api/products', authenticate, (req, res) => {
     Product.find({ userId: req.user._id })
-      .then(categories => res.send(categories))
+      .then((products) => {
+        res.send(products);
+      })
       .catch(err => res.status(400).send(err));
   });
 
