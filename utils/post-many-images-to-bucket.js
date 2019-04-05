@@ -21,7 +21,8 @@ module.exports = (req, res) => {
                     Bucket: process.env.BUCKET_NAME,
                     Key: file.originalname,
                     Body: file.buffer,
-                    ACL: 'public-read'
+                    ACL: 'public-read',
+                    ContentType: mimetype,
                 };
                 s3bucket.upload(params, function (err, data) {
                     if (err) {

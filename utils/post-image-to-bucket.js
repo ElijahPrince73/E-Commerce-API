@@ -15,12 +15,14 @@ module.exports = (req, res) => {
     const s3 = new AWS.S3();
 
     const fileName = req.files[0].originalname
+    const mimetype = req.files[0].mimetype
 
     const params = {
       Bucket: process.env.BUCKET_NAME,
       Body: fileName,
       Key: fileName,
-      ACL: 'public-read'
+      ACL: 'public-read',
+      ContentType: mimetype,
     };
 
     s3.upload(params, function (err, data) {
