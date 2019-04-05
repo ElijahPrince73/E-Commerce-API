@@ -19,7 +19,8 @@ module.exports = (req, res) => {
     const params = {
       Bucket: process.env.BUCKET_NAME,
       Body: fileName,
-      Key: fileName
+      Key: fileName,
+      ACL: 'public-read'
     };
 
     s3.upload(params, function (err, data) {
