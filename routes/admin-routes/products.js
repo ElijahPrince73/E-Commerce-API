@@ -10,7 +10,7 @@ const Product = mongoose.model('Product');
 
 module.exports = (app) => {
   // Create new product
-  app.post('/api/product', upload.any(), authenticate, (req, res) => {
+  app.post('/api/products', upload.any(), authenticate, (req, res) => {
     const productValues = JSON.parse(req.body.text);
 
     let {
@@ -48,16 +48,15 @@ module.exports = (app) => {
   });
 
   // Delete products
-  app.delete('/api/product', authenticate, (req, res) => {
-    const ids = req.body.ids.map(id => ({
-      _id: id,
-    }));
+  app.post('/api/products-delete', authenticate, (req, res) => {
+    const { ids } = req.body;
 
-    Product.deleteMany(ids[0])
+    Product.deleteMany({ _id: ids.map(id => id) })
       .then(() => {
         res.status(200).send('products deleted');
       })
       .catch((err) => {
+        console.log(err);
         res.status(500).send(err);
       });
   });
