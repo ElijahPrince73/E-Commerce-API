@@ -47,12 +47,17 @@ module.exports = (app) => {
       .catch(err => res.status(400).send(err));
   });
 
-  // Delete product
-  app.delete('/api/product/:productId', authenticate, (req, res) => {
-    Product.findByIdAndDelete(req.params.productId)
+  // Delete products
+  app.delete('/api/product', authenticate, (req, res) => {
+    const ids = req.body.ids.map(id => ({
+      _id: id,
+    }));
+
+    Product.deleteMany(ids[0])
       .then(() => {
-        res.status(200).send('product deleted');
-      }).catch((err) => {
+        res.status(200).send('products deleted');
+      })
+      .catch((err) => {
         res.status(500).send(err);
       });
   });
