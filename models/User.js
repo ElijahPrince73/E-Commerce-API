@@ -1,3 +1,4 @@
+/* eslint-disable */
 const mongoose = require('mongoose');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
@@ -8,6 +9,12 @@ const CartSchema = require('./Cart');
 const OrdersSchema = require('./Orders');
 
 const UserSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 1,
+  },
   email: {
     type: String,
     required: true,

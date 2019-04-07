@@ -1,8 +1,7 @@
-/* eslint-disable */
 const AWS = require('aws-sdk');
 require('dotenv').config({ path: './.env.default' });
 
-module.exports = (req, res) => {
+module.exports = (req) => {
   // Configure client for use with Spaces
   const spacesEndpoint = new AWS.Endpoint(process.env.SPACES_NAME);
   AWS.config.update({
@@ -14,26 +13,26 @@ module.exports = (req, res) => {
   const uploader = () => new Promise((resolve, reject) => {
     const s3 = new AWS.S3();
 
-    const fileName = req.files[0].originalname
-    const mimetype = req.files[0].mimetype
+    const fileName = req.files[0].originalname;
+    const mimetype = req.files[0].mimetype;
 
     const params = {
       Bucket: process.env.BUCKET_NAME,
-      Body: fileName,
+      Body: req.files[0].buffer,
       Key: fileName,
       ACL: 'public-read',
       ContentType: mimetype,
     };
 
-    s3.upload(params, function (err, data) {
-      //handle error
+    s3.upload(params, (err, data) => {
+      // handle error
       if (err) {
-        reject(err)
+        reject(err);
       }
 
-      //success
+      // success
       if (data) {
-        resolve(data.key)
+        resolve(data.key);
       }
     });
   });
