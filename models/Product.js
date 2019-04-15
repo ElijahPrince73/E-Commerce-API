@@ -17,6 +17,14 @@ const ProductSchema = Schema({
   images: [Image],
   userId: String,
   sku: String,
+  priceTaxExcl: String,
+  priceTaxIncl: String,
+  taxRate: String,
+  width: String,
+  height: String,
+  depth: String,
+  weight: String,
+  shippingFee: String,
 });
 
 mongoose.model('Product', ProductSchema);
