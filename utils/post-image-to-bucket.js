@@ -1,27 +1,40 @@
+/* eslint-disable */
 const AWS = require('aws-sdk');
 require('dotenv').config({ path: './.env.default' });
 
-module.exports = (req) => {
+module.exports = (req, userId) => new Promise((resolve, reject) => {
+  let images = [];
+
+  const success = (image) => {
+    image.url = image.Location;
+    image.userId = userId;
+
+    images.push(image);
+
+    if (req.files.length === images.length) {
+      resolve(images);
+    }
+  };
+
   // Configure client for use with Spaces
   const spacesEndpoint = new AWS.Endpoint(process.env.SPACES_NAME);
+
   AWS.config.update({
     endpoint: spacesEndpoint,
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_key,
   });
 
-  const uploader = () => new Promise((resolve, reject) => {
-    const s3 = new AWS.S3();
+  const s3 = new AWS.S3();
+  const files = req.files;
 
-    const fileName = req.files[0].originalname;
-    const mimetype = req.files[0].mimetype;
-
+  files.map((file) => {
     const params = {
       Bucket: process.env.BUCKET_NAME,
-      Body: req.files[0].buffer,
-      Key: fileName,
+      Body: file.buffer,
+      Key: file.originalname,
       ACL: 'public-read',
-      ContentType: mimetype,
+      ContentType: file.mimetype,
     };
 
     s3.upload(params, (err, data) => {
@@ -32,9 +45,8 @@ module.exports = (req) => {
 
       // success
       if (data) {
-        resolve(data.key);
+        success(data);
       }
     });
   });
-  return uploader();
-};
+});

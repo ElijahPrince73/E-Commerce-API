@@ -14,8 +14,6 @@ module.exports = (req, res) => {
     });
     return new Promise((resolve, reject) => {
         s3bucket.createBucket(function () {
-            var ResponseData = [];
-
             file.map((file) => {
                 var params = {
                     Bucket: process.env.BUCKET_NAME,

@@ -56,7 +56,6 @@ module.exports = (app) => {
         res.status(200).send('products deleted');
       })
       .catch((err) => {
-        console.log(err);
         res.status(500).send(err);
       });
   });
