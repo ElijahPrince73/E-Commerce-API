@@ -1,6 +1,6 @@
 /* eslint-disable */
 const AWS = require('aws-sdk');
-require('dotenv').config({ path: './.env.default' });
+require('dotenv').config();
 
 module.exports = (req, userId) => new Promise((resolve, reject) => {
   let images = [];
@@ -19,18 +19,18 @@ module.exports = (req, userId) => new Promise((resolve, reject) => {
   // Configure client for use with Spaces
   const spacesEndpoint = new AWS.Endpoint(process.env.SPACES_NAME);
 
-  AWS.config.update({
+  const config = {
     endpoint: spacesEndpoint,
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_key,
-  });
+  }
 
-  const s3 = new AWS.S3();
+  const s3 = new AWS.S3(config);
   const files = req.files;
 
   files.map((file) => {
     const params = {
-      Bucket: process.env.BUCKET_NAME,
+      Bucket: 'e-commerce-media',
       Body: file.buffer,
       Key: file.originalname,
       ACL: 'public-read',
@@ -40,6 +40,7 @@ module.exports = (req, userId) => new Promise((resolve, reject) => {
     s3.upload(params, (err, data) => {
       // handle error
       if (err) {
+        console.log(err)
         reject(err);
       }
 

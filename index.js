@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-require('dotenv').config({ path: './.env.default' });
+require('dotenv').config();
 
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
