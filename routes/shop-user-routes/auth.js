@@ -5,15 +5,20 @@ const ShopUser = mongoose.model('ShopUser');
 module.exports = (app) => {
   // Register User Route
   app.post('/api/register', (req, res) => {
-    if (req.body.password !== req.body.passwordConf) {
+    const {
+      name, email, password, passwordConf,
+    } = req.body;
+
+    if (password !== passwordConf) {
       res.status(403).send({
         errorMessage: 'Password and Password Confirmation Do Not Match',
       });
     }
 
     const user = new ShopUser({
-      email: req.body.email,
-      password: req.body.password,
+      name,
+      email,
+      password,
     });
 
     user.save()
@@ -28,8 +33,9 @@ module.exports = (app) => {
 
   // Login User Route
   app.post('/api/login', (req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
+    const {
+      email, password,
+    } = req.body;
 
     ShopUser.findByCredentials(email, password)
       .then(user => user.generateAuthToken('user')

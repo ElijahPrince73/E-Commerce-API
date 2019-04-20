@@ -1,14 +1,13 @@
 const DB_STRIPE_KEY = process.env.DB_STRIPE_KEY;
 const stripe = require('stripe')(DB_STRIPE_KEY);
 const mongoose = require('mongoose');
-const authenticate = require('../../middleware/auth');
 
 const ShopUser = mongoose.model('ShopUser');
 
 require('dotenv').config({ path: './.env.default' });
 
 module.exports = (app) => {
-  app.post('/api/payment', authenticate, (req, res) => {
+  app.post('/api/payment', (req, res) => {
     const { _id, cart } = req.user;
     const { stripeToken, total, order } = req.body;
     stripe.charges.create({

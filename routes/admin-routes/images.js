@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const postImageToBucket = require('../../utils/post-image-to-bucket');
 const deleteImageFromBucket = require('../../utils/delete-image-from-bucket');
-const authenticate = require('../../middleware/auth');
+const authenticate = require('../../middleware/admin-user-auth');
 
 const Image = mongoose.model('Image');
 require('dotenv').config({ path: './.env.default' });

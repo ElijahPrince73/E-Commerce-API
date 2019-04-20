@@ -5,8 +5,6 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const CategoriesSchema = require('./Category');
 const ProductSchema = require('./Product');
-const CartSchema = require('./Cart');
-const OrdersSchema = require('./Orders');
 
 const AdminSchema = new mongoose.Schema({
   name: {
@@ -121,4 +119,4 @@ AdminSchema.pre('save', function (next) {
   }
 });
 
-mongoose.model('User', AdminSchema);
+mongoose.model('AdminUser', AdminSchema);

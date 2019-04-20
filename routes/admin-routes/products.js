@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const multer = require('multer');
-const authenticate = require('../../middleware/auth');
+const authenticate = require('../../middleware/admin-user-auth');
 require('dotenv').config({ path: './.env.default' });
 const createItem = require('../../utils/create-item');
 

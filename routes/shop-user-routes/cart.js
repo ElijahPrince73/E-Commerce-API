@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const Product = mongoose.model('Product');
 const ShopUser = mongoose.model('ShopUser');
-const authenticate = require('../../middleware/auth');
+const authenticate = require('../../middleware/shop-user-auth');
 
 module.exports = (app) => {
   // Add product to cart
@@ -42,19 +42,18 @@ module.exports = (app) => {
 
   // Remove from cart
   app.delete('/api/delete-product-from-cart', authenticate, (req, res) => {
-    const {
-      productId, userId,
-    } = req.body;
+    const { productId } = req.body;
+    const { _id } = req.user._id;
 
-    ShopUser.findById(userId)
+    ShopUser.findById(_id)
       .then((user) => {
-        const cart = user.cart[0].cartProducts;
+        const cart = user.cart;
 
         // Loose way of finding the product in the cart based 0f ID
-        const removedProductArtr = cart.filter(product => product._id != productId);
+        const removedProductArr = cart.filter(product => product._id != productId);
 
         // Add back the array
-        user.cart[0].cartProducts = removedProductArtr;
+        user.cart = removedProductArr;
 
         return user.save();
       })
@@ -66,13 +65,12 @@ module.exports = (app) => {
 
   // Change quantity of product
   app.put('/api/change-product-quanity', authenticate, (req, res) => {
-    const {
-      productId, userId, quantity,
-    } = req.body;
+    const { productId, quantity } = req.body;
+    const { _id } = req.user._id;
 
-    ShopUser.findById(userId)
+    ShopUser.findById(_id)
       .then((user) => {
-        const cart = user.cart[0].cartProducts;
+        const cart = user.cart;
         // Find index of the product in the array
         const indexToUpdate = cart.findIndex(product => product._id == productId);
 
@@ -95,13 +93,11 @@ module.exports = (app) => {
 
   // Get products in cart
   app.get('/api/cart', authenticate, (req, res) => {
-    const {
-      userId,
-    } = req.body;
+    const { _id } = req.user._id;
 
-    ShopUser.findById(userId)
+    ShopUser.findById(_id)
       .then((user) => {
-        const cart = user.cart[0].cartProducts;
+        const cart = user.cart;
         res.send(cart);
       })
       .catch((err) => {

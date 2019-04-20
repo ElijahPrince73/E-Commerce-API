@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
-const User = mongoose.model('User');
+const AdminUser = mongoose.model('AdminUser');
 
 module.exports = (req, res, next) => {
   const token = req.header('x-auth');
 
-  User.findByToken(token)
+  AdminUser.findByToken(token)
     .then((user) => {
       if (!user) {
         return Promise.reject();

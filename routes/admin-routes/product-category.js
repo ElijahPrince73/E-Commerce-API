@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const authenticate = require('../../middleware/auth');
+const authenticate = require('../../middleware/admin-user-auth');
 
 const Category = mongoose.model('Category');
 const Product = mongoose.model('Product');
