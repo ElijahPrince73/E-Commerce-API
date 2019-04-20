@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const User = mongoose.model('User');
+const ShopUser = mongoose.model('ShopUser');
 
 module.exports = (app) => {
   // Register User Route
@@ -11,7 +11,7 @@ module.exports = (app) => {
       });
     }
 
-    const user = new User({
+    const user = new ShopUser({
       email: req.body.email,
       password: req.body.password,
     });
@@ -31,7 +31,7 @@ module.exports = (app) => {
     const email = req.body.email;
     const password = req.body.password;
 
-    User.findByCredentials(email, password)
+    ShopUser.findByCredentials(email, password)
       .then(user => user.generateAuthToken('user')
         .then((token) => {
           res.header('x-auth', token).send(user);

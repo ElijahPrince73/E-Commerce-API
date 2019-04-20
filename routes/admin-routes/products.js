@@ -4,9 +4,10 @@ const authenticate = require('../../middleware/auth');
 require('dotenv').config({ path: './.env.default' });
 const createItem = require('../../utils/create-item');
 
+const Product = mongoose.model('Product');
+
 // Used to read form-data sent from the client
 const upload = multer();
-const Product = mongoose.model('Product');
 
 module.exports = (app) => {
   // Create new product

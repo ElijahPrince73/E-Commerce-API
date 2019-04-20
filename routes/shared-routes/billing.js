@@ -3,7 +3,7 @@ const stripe = require('stripe')(DB_STRIPE_KEY);
 const mongoose = require('mongoose');
 const authenticate = require('../../middleware/auth');
 
-const User = mongoose.model('User');
+const ShopUser = mongoose.model('ShopUser');
 
 require('dotenv').config({ path: './.env.default' });
 
@@ -22,7 +22,7 @@ module.exports = (app) => {
         order,
       },
     })
-      .then(() => User.findById(_id))
+      .then(() => ShopUser.findById(_id))
       .then((user) => {
         user.cart = [];
         return user.save();

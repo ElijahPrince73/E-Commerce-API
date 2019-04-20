@@ -8,7 +8,7 @@ const ProductSchema = require('./Product');
 const CartSchema = require('./Cart');
 const OrdersSchema = require('./Orders');
 
-const UserSchema = new mongoose.Schema({
+const AdminSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -39,24 +39,14 @@ const UserSchema = new mongoose.Schema({
       },
     },
   ],
-  cart: [CartSchema],
-  orders: [OrdersSchema],
   categories: [CategoriesSchema],
   products: [ProductSchema],
-  access: {
-    type: String,
-  },
+  access: String
 });
 
-UserSchema.methods.generateAuthToken = function (type) {
+AdminSchema.methods.generateAuthToken = function (type) {
   const user = this;
-  let access;
-
-  if (type === 'admin') {
-    access = 'admin';
-  } else {
-    access = 'user';
-  }
+  let access = 'admin';;
 
   const token = jwt
     .sign(
@@ -75,13 +65,13 @@ UserSchema.methods.generateAuthToken = function (type) {
   return user.save().then(() => token);
 };
 
-UserSchema.statics.findByCredentials = function (email, password) {
+AdminSchema.statics.findByCredentials = function (email, password) {
   const User = this;
 
   return User.findOne({ email })
     .then((user) => {
       // Will only work if we have a user with a certain access level
-      if (user && (user.access === 'admin' || user.access === 'user')) {
+      if (user && user.access === 'admin') {
         console.log('success');
         return new Promise((resolve, reject) => {
           bcrypt.compare(password, user.password, (err, res) => {
@@ -98,7 +88,7 @@ UserSchema.statics.findByCredentials = function (email, password) {
 };
 
 // Model Method to findByToken
-UserSchema.statics.findByToken = function (token) {
+AdminSchema.statics.findByToken = function (token) {
   const User = this;
   let decoded;
 
@@ -117,7 +107,7 @@ UserSchema.statics.findByToken = function (token) {
 };
 
 // Creates hashed password
-UserSchema.pre('save', function (next) {
+AdminSchema.pre('save', function (next) {
   const user = this;
   if (user.isModified('password')) {
     bcrypt.genSalt(10, (err, salt) => {
@@ -131,4 +121,4 @@ UserSchema.pre('save', function (next) {
   }
 });
 
-mongoose.model('User', UserSchema);
+mongoose.model('User', AdminSchema);

@@ -2,49 +2,34 @@
 const mongoose = require('mongoose');
 
 const Product = mongoose.model('Product');
-const User = mongoose.model('User');
+const ShopUser = mongoose.model('ShopUser');
 const authenticate = require('../../middleware/auth');
 
 module.exports = (app) => {
   // Add product to cart
-  app.post('/api/add-to-cart', authenticate, (req, res) => {
-    const {
-      productId, quantity, userId,
-    } = req.body;
+  app.post('/api/add-to-cart', authenticate, async (req, res) => {
+    const { productId, quantity } = req.body;
+    const { _id } = req.user._id;
 
-    let productItem = {};
-    // Find product
-    Product.findById(productId)
-      .then(product => productItem = product);
+    // Finds product
+    const product = await Product.findById(productId);
 
     // Find user
-    User.findById(userId)
+    ShopUser.findById(_id)
       .then((user) => {
-        // Assign the quanity to the product we previously found
-        productItem.quantity = quantity;
-
         const cart = user.cart;
 
-        // TODO: fix all this
-        // Only way to add products to cart using current schema
-        cart.push({ cartProducts: [] });
+        // Assign the quanity to the product we previously found
+        product.quantity = quantity;
 
-        // adds the product found to the cartProducts array
-        cart[0].cartProducts.push(productItem);
+        // adds the product found to the carts array
+        cart.push(product);
 
-        const total = cart[0].cartProducts.reduce((a, b) => a + b.price, 0);
+        const total = cart.reduce((a, b) => a + b.price, 0);
 
-        // Still hacky
-        // assigns the cartProducts array to the cart
-        const cartProducts = cart[0].cartProducts;
-
-        const updatedCart = {
-          cartProducts,
-          total,
-          items: cartProducts.length,
-        };
-
-        user.cart = updatedCart;
+        user.cart = cart;
+        user.totalItemsInCart = cart.length;
+        user.totalAmount = total;
 
         return user.save();
       })
@@ -54,13 +39,14 @@ module.exports = (app) => {
         res.send(err);
       });
   });
+
   // Remove from cart
   app.delete('/api/delete-product-from-cart', authenticate, (req, res) => {
     const {
       productId, userId,
     } = req.body;
 
-    User.findById(userId)
+    ShopUser.findById(userId)
       .then((user) => {
         const cart = user.cart[0].cartProducts;
 
@@ -84,7 +70,7 @@ module.exports = (app) => {
       productId, userId, quantity,
     } = req.body;
 
-    User.findById(userId)
+    ShopUser.findById(userId)
       .then((user) => {
         const cart = user.cart[0].cartProducts;
         // Find index of the product in the array
@@ -113,7 +99,7 @@ module.exports = (app) => {
       userId,
     } = req.body;
 
-    User.findById(userId)
+    ShopUser.findById(userId)
       .then((user) => {
         const cart = user.cart[0].cartProducts;
         res.send(cart);

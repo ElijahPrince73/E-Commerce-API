@@ -11,7 +11,8 @@ mongoose.set('useCreateIndex', true);
 const PORT = process.env.PORT || 5000;
 
 // Models
-require('./models/User');
+require('./models/Admin-User');
+require('./models/Shop-User');
 
 const DB_URL = process.env.DB_URL;
 
@@ -23,8 +24,8 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // ///////////// USER ROUTES //////////////////
-require('./routes/user-routes/auth')(app);
-require('./routes/user-routes/cart')(app);
+require('./routes/shop-user-routes/auth')(app);
+require('./routes/shop-user-routes/cart')(app);
 
 // ///////////// ADMIN ROUTES /////////////////
 require('./routes/admin-routes/auth')(app);

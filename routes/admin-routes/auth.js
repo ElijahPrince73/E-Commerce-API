@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const authenticate = require('../../middleware/auth');
 
-const User = mongoose.model('User');
+const AdminUser = mongoose.model('AdminUser');
 
 module.exports = (app) => {
   // Admin register
@@ -16,7 +16,7 @@ module.exports = (app) => {
       });
     }
 
-    const user = new User({
+    const user = new AdminUser({
       name,
       email,
       password,
@@ -38,7 +38,7 @@ module.exports = (app) => {
       email, password,
     } = req.body;
 
-    User.findByCredentials(email, password)
+    AdminUser.findByCredentials(email, password)
       .then(user => user.generateAuthToken('admin')
         .then((token) => {
           res.header('x-auth', token).send(token);
