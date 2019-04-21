@@ -10,7 +10,7 @@ const Category = mongoose.model('Category');
 
 module.exports = (app) => {
   // Create new Category
-  app.post('/api/category', upload.any(), authenticate, (req, res) => {
+  app.post('/api/categories', upload.any(), authenticate, (req, res) => {
     const categoryValues = JSON.parse(req.body.text);
 
     let {
@@ -25,7 +25,7 @@ module.exports = (app) => {
   });
 
   // Update category
-  app.put('/api/category/:categoryId', authenticate, (req, res) => {
+  app.put('/api/categories', authenticate, (req, res) => {
     const { categoryName, description } = req.body;
     Category.findByIdAndUpdate(
       { _id: req.params.categoryId },
@@ -37,8 +37,10 @@ module.exports = (app) => {
   });
 
   // Delete Category
-  app.delete('/api/category/:categoryId', authenticate, (req, res) => {
-    Category.findByIdAndDelete(req.params.categoryId)
+  app.post('/api/categories-delete', authenticate, (req, res) => {
+    const { ids } = req.body;
+
+    Category.deleteMany({ _id: ids.map(id => id) })
       .then(() => {
         res.status(200).send('Category deleted');
       })

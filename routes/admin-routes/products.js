@@ -54,7 +54,7 @@ module.exports = (app) => {
 
     Product.deleteMany({ _id: ids.map(id => id) })
       .then(() => {
-        res.status(200).send('products deleted');
+        res.status(200).send('Products deleted');
       })
       .catch((err) => {
         res.status(500).send(err);
