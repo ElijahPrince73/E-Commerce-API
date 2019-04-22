@@ -11,6 +11,7 @@ const CategorySchema = Schema({
   categoryDescription: String,
   productList: [Product],
   image: String,
+  userId: String,
 });
 
 mongoose.model('Category', CategorySchema);

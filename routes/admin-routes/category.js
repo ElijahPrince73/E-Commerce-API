@@ -1,26 +1,27 @@
 const mongoose = require('mongoose');
-const multer = require('multer');
 const authenticate = require('../../middleware/admin-user-auth');
-const createItem = require('../../utils/create-item');
 require('dotenv').config({ path: './.env.default' });
 
-// Used to read form-data sent from the client
-const upload = multer();
 const Category = mongoose.model('Category');
 
 module.exports = (app) => {
   // Create new Category
-  app.post('/api/categories', upload.any(), authenticate, (req, res) => {
-    const categoryValues = JSON.parse(req.body.text);
-
-    let {
-      categoryName, categoryDescription, alt,
-    } = categoryValues;
+  app.post('/api/categories', authenticate, (req, res) => {
+    console.log(req.body);
+    const {
+      categoryName, categoryDescription,
+    } = req.body;
 
     const _id = req.user._id;
 
-    createItem(req, res, categoryName, categoryDescription, '', alt, _id, 'catgory')
-      .then(category => res.send(category))
+    const category = new Category({
+      categoryName,
+      categoryDescription,
+      userId: _id,
+    });
+
+    return category.save()
+      .then(() => res.send('Category Created'))
       .catch(err => res.status(400).send(err));
   });
 

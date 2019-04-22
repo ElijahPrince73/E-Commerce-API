@@ -6,7 +6,9 @@ const Category = mongoose.model('Category');
 module.exports = (app) => {
   // Get all categories
   app.get('/api/categories', authHandler, (req, res) => {
-    Category.find({})
+    const _id = req.user._id;
+
+    Category.find({ userId: _id })
       .then(categories => res.send(categories))
       .catch(err => res.status(400).send(err));
   });

@@ -4,72 +4,37 @@ require('dotenv').config({ path: './.env.default' });
 const postImageToBucket = require('./post-image-to-bucket');
 
 const Product = mongoose.model('Product');
-const Category = mongoose.model('Category');
 const Image = mongoose.model('Image');
 
-module.exports = (req, res, name, description, price, alt, userId, categories, sku, item) => {
-  // Find out if we adding a image to a product or category
-  if (item === 'product') {
-    // If our object has files to it
-    if (Object.keys(req.files).length !== 0) {
-      // send image to digital ocean bucket
-      return postImageToBucket(req, userId)
-        .then(images => Image.insertMany(images))
-        .then((savedImages) => {
-          // Create product
-          const product = new Product({
-            productName: name,
-            productDescription: description,
-            price,
-            userId,
-            categories,
-            sku,
-            images: savedImages,
-          });
-
-          return product.save();
-        });
-    }
-    //  Only used if out req does't have files
-    const product = new Product({
-      productName: name,
-      productDescription: description,
-      price,
-      userId,
-      categories,
-      sku,
-    });
-
-    return product.save();
-  }
-
-  // else catgory
+module.exports = (req, res, name, description, price, alt, userId, categories, sku) => {
   if (Object.keys(req.files).length !== 0) {
-    return postImageToBucket(req, res)
-      .then((imageName) => {
-        const image = new Image({
-          url: `${process.env.SPACES_URL}/${imageName}`,
-          alt,
+  // send image to digital ocean bucket
+    return postImageToBucket(req, userId)
+      .then(images => Image.insertMany(images))
+      .then((savedImages) => {
+      // Create product
+        const product = new Product({
+          productName: name,
+          productDescription: description,
+          price,
           userId,
-          fileName: imageName,
+          categories,
+          sku,
+          images: savedImages,
         });
 
-        return image.save();
-      })
-      .then((image) => {
-        const category = new Category({
-          categoryName: name,
-          categoryDescription: description,
-          image: image.url,
-        });
-
-        return category.save();
+        return product.save();
       });
   }
-  const category = new Category({
-    categoryName: name,
-    categoryDescription: description,
+  //  Only used if out req does't have files
+  const product = new Product({
+    productName: name,
+    productDescription: description,
+    price,
+    userId,
+    categories,
+    sku,
   });
 
-  return category.save();
+  return product.save();
 };
