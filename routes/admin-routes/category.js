@@ -7,7 +7,6 @@ const Category = mongoose.model('Category');
 module.exports = (app) => {
   // Create new Category
   app.post('/api/categories', authenticate, (req, res) => {
-    console.log(req.body);
     const {
       categoryName, categoryDescription,
     } = req.body;
