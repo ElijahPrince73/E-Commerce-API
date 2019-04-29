@@ -19,7 +19,7 @@ module.exports = (app) => {
       userId: _id,
     });
 
-    return category.save()
+    category.save()
       .then(() => res.send('Category Created'))
       .catch(err => res.status(400).send(err));
   });

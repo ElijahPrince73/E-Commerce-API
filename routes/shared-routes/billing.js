@@ -4,24 +4,45 @@ const mongoose = require('mongoose');
 const authHandler = require('../../middleware/middleware-handler');
 
 const ShopUser = mongoose.model('ShopUser');
+const OrdersSchema = mongoose.model('Order');
 
 require('dotenv').config({ path: './.env.default' });
 
 module.exports = (app) => {
   app.post('/api/payment', authHandler, (req, res) => {
-    const { _id, cart } = req.user;
-    const { stripeToken, total, order } = req.body;
+    const {
+      _id,
+      cart,
+      email,
+      totalItemsInCart,
+      totalAmount,
+    } = req.user;
+    const {
+      stripeToken,
+      address,
+      address2,
+      zip,
+    } = req.body;
+
     stripe.charges
       .create({
-        amount: total,
+        amount: Math.round(totalAmount * 100),
         currency: 'usd',
         description: 'Customer payment',
         source: stripeToken,
-        order: cart,
-        metadata: {
-          userId: `${_id}`,
-          order,
-        },
+      })
+      .then(() => {
+        const order = new OrdersSchema({
+          userId: _id,
+          email,
+          productList: cart,
+          address,
+          address2,
+          zip,
+          totalAmount,
+          items: totalItemsInCart,
+        });
+        return order.save();
       })
       .then(() => ShopUser.findById(_id))
       .then((user) => {

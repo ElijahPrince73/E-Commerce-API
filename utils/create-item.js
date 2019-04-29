@@ -16,7 +16,7 @@ module.exports = (req, res, name, description, price, alt, userId, categories, s
         const product = new Product({
           productName: name,
           productDescription: description,
-          price,
+          price: price.toFixed(2),
           userId,
           categories,
           sku,
@@ -30,7 +30,7 @@ module.exports = (req, res, name, description, price, alt, userId, categories, s
   const product = new Product({
     productName: name,
     productDescription: description,
-    price,
+    price: price.toFixed(2),
     userId,
     categories,
     sku,
