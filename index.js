@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+
 require('dotenv').config();
 
 mongoose.set('useNewUrlParser', true);
@@ -13,6 +14,10 @@ const PORT = process.env.PORT || 5000;
 // Models
 require('./models/Admin-User');
 require('./models/Shop-User');
+require('./models/Orders');
+require('./models/Category');
+require('./models/Image');
+require('./models/Product');
 
 const DB_URL = process.env.DB_URL;
 
@@ -27,6 +32,7 @@ app.use(bodyParser.json());
 require('./routes/shop-user-routes/auth')(app);
 require('./routes/shop-user-routes/cart')(app);
 
+
 // ///////////// ADMIN ROUTES /////////////////
 require('./routes/admin-routes/auth')(app);
 require('./routes/admin-routes/images')(app);
@@ -39,6 +45,7 @@ require('./routes/shared-routes/category')(app);
 require('./routes/shared-routes/products')(app);
 require('./routes/shared-routes/billing')(app);
 require('./routes/shared-routes/forgot-password')(app);
+require('./routes/shared-routes/orders')(app);
 
 app.listen(PORT, () => {
   console.log(`listening on port: ${PORT}`);

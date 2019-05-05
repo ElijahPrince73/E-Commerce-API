@@ -9,6 +9,7 @@ const OrdersSchema = mongoose.model('Order');
 require('dotenv').config({ path: './.env.default' });
 
 module.exports = (app) => {
+  // Creates a stripe charge and an order
   app.post('/api/payment', authHandler, (req, res) => {
     const {
       _id,
@@ -17,6 +18,7 @@ module.exports = (app) => {
       totalItemsInCart,
       totalAmount,
     } = req.user;
+
     const {
       stripeToken,
       address,
