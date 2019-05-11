@@ -15,7 +15,21 @@ module.exports = (app) => {
     const productValues = JSON.parse(req.body.text);
 
     let {
-      productName, productDescription, price, alt, categories, sku,
+      productName,
+      productDescription,
+      price,
+      alt,
+      categories,
+      sku,
+      priceTaxExcl,
+      priceTaxIncl,
+      taxRate,
+      width,
+      height,
+      depth,
+      shippingFee,
+      quantity,
+      weight,
     } = productValues;
 
     const userId = req.user._id;
@@ -30,10 +44,19 @@ module.exports = (app) => {
       userId,
       categories,
       sku,
+      priceTaxExcl,
+      priceTaxIncl,
+      taxRate,
+      width,
+      height,
+      depth,
+      shippingFee,
+      quantity,
+      weight,
       'product',
     )
       .then(product => res.send(product))
-      .catch(err => res.status(400).send(err));
+      .catch(err => console.log(err));
   });
 
   // Update product
