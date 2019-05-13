@@ -25,10 +25,12 @@ module.exports = (app) => {
   });
 
   // Update category
-  app.put('/api/categories', authenticate, (req, res) => {
+  app.put('/api/categories/:categoryId', authenticate, (req, res) => {
     const { categoryName, categoryDescription } = req.body;
+    const { categoryId } = req.params;
+
     Category.findByIdAndUpdate(
-      { _id: req.params.categoryId },
+      { _id: categoryId },
       { $set: { categoryName, categoryDescription } },
       { new: true },
     )

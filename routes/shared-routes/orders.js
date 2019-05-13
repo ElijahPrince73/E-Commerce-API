@@ -16,7 +16,7 @@ module.exports = (app) => {
   // Get one order
   app.get('/api/orders/:orderId', (req, res) => {
     const { orderId } = req.params;
-    Orders.find({ _id: orderId })
+    Orders.findById({ _id: orderId })
       .then((order) => {
         res.send(order);
       })
