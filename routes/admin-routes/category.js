@@ -26,10 +26,10 @@ module.exports = (app) => {
 
   // Update category
   app.put('/api/categories', authenticate, (req, res) => {
-    const { categoryName, description } = req.body;
+    const { categoryName, categoryDescription } = req.body;
     Category.findByIdAndUpdate(
       { _id: req.params.categoryId },
-      { $set: { categoryName, description } },
+      { $set: { categoryName, categoryDescription } },
       { new: true },
     )
       .then(category => res.send(category))

@@ -61,10 +61,45 @@ module.exports = (app) => {
 
   // Update product
   app.put('/api/product/:productId', authenticate, (req, res) => {
-    const { productName, description, categories } = req.body;
+    const {
+      categories,
+      price,
+      images,
+      productDescription,
+      productName,
+      sku,
+      priceTaxExcl,
+      priceTaxIncl,
+      taxRate,
+      weight,
+      width,
+      height,
+      depth,
+      shippingFee,
+      quantity,
+    } = req.body;
+
     Product.findByIdAndUpdate(
       { _id: req.params.productId },
-      { $set: { productName, description, categories } },
+      {
+        $set: {
+          categories,
+          price,
+          images,
+          productDescription,
+          productName,
+          sku,
+          priceTaxExcl,
+          priceTaxIncl,
+          taxRate,
+          weight,
+          width,
+          height,
+          depth,
+          shippingFee,
+          quantity,
+        },
+      },
       { new: true },
     )
       .then(product => res.send(product))
