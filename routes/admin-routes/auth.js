@@ -54,14 +54,11 @@ module.exports = (app) => {
     res.send(req.user);
   });
 
-  app.delete('/api/me/token', authenticate, (req, res) => {
-    req.user.removeToken(req.token).then(
-      () => {
-        res.status(200).send();
-      },
-      () => {
-        res.status(400).send();
-      },
-    );
+  app.post('/api/logout', authenticate, (req, res) => {
+    const { token } = req.body;
+    const { tokens } = req.user;
+    const indexOfToken = tokens.findIndex(tokenObj => tokenObj.token === token);
+    tokens.splice(indexOfToken, 1);
+    res.status(200).send();
   });
 };
