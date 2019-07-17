@@ -47,6 +47,8 @@ require('./routes/shared-routes/billing')(app);
 require('./routes/shared-routes/forgot-password')(app);
 require('./routes/shared-routes/orders')(app);
 
+app.get('/', (req, res) => res.send('well hello there'));
+
 app.listen(PORT, () => {
   console.log(`listening on port: ${PORT}`);
 });
