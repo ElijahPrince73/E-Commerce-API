@@ -1,7 +1,8 @@
 {
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "test": "jest"
   },
   "dependencies": {
     "aws-sdk": "^2.437.0",
@@ -16,6 +17,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.0",
     "eslint-plugin-react": "^7.12.4",
     "express": "^4.16.4",
+    "jest": "^24.8.0",
     "jsonwebtoken": "^8.4.0",
     "mongodb": "^3.2.3",
     "mongoose": "^5.4.15",

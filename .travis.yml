@@ -10,6 +10,9 @@ services:
 before_install:
   - docker build -t elijahprince73/e-commerce-api -f dev.Dockerfile .
 
+scripts:
+  - docker run elijahprince73/e-commerce-api npmm test -- --coverage
+
 after_success: 
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdn
   - docker push elijahprince73/e-commerce-api
