@@ -13,6 +13,15 @@ before_install:
 scripts:
   - docker run elijahprince73/e-commerce-api npmm test -- --coverage
 
-after_success: 
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-  - docker push elijahprince73/e-commerce-api
+deploy:
+  provider: elasticbeanstalk
+  region: us-west-1
+  app: "e-commerce-api"
+  env: "ECommerceApi-env"
+  bucket_name: "elasticbeanstalk-us-west-1-784098998479"
+  bucket_path: "e-commerce-api"
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: 
+    secure: $AWS_SECRET_KEY
