@@ -17,7 +17,7 @@ deploy:
   provider: elasticbeanstalk
   region: us-west-1
   app: "e-commerce-api"
-  env: "ECommerceApi-env"
+  env: "ECommerceApi-env-1"
   bucket_name: "elasticbeanstalk-us-west-1-784098998479"
   bucket_path: "e-commerce-api"
   on:
