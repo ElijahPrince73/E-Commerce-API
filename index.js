@@ -5,8 +5,6 @@ const cors = require('cors');
 
 require('dotenv').config();
 
-console.log(process.env);
-
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
