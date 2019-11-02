@@ -119,4 +119,4 @@ AdminSchema.pre('save', function (next) {
   }
 });
 
-mongoose.model('AdminUser', AdminSchema);
+mongoose.model("AdminUser", AdminSchema, "AdminUser");

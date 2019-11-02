@@ -29,4 +29,4 @@ const OrdersSchema = Schema({
   items: Number,
 });
 
-mongoose.model('Order', OrdersSchema);
+mongoose.model('Order', OrdersSchema, 'Order');

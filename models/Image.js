@@ -10,4 +10,4 @@ const ImageSchema = new Schema({
   userId: String,
 });
 
-mongoose.model('Image', ImageSchema);
+mongoose.model('Image', ImageSchema, 'Image');

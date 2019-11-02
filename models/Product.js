@@ -27,4 +27,4 @@ const ProductSchema = Schema({
   shippingFee: Number,
 });
 
-mongoose.model('Product', ProductSchema);
+mongoose.model('Product', ProductSchema, 'Product');

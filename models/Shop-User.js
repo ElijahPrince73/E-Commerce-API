@@ -122,4 +122,4 @@ ShopUserSchema.pre('save', function (next) {
     }
 });
 
-mongoose.model('ShopUser', ShopUserSchema);
+mongoose.model("ShopUser", ShopUserSchema, "ShopUser");

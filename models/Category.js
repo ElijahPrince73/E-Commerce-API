@@ -14,4 +14,4 @@ const CategorySchema = Schema({
   userId: String,
 });
 
-mongoose.model('Category', CategorySchema);
+mongoose.model('Category', CategorySchema, 'Category');
